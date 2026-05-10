@@ -1,0 +1,2 @@
+"""Vector similarity API package."""
+

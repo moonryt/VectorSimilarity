@@ -1,0 +1,101 @@
+<script setup lang="ts">
+import dayjs from "dayjs"
+import { computed } from "vue"
+import { useRoute } from "vue-router"
+import { ArrowLeft, Clock3, Info, Scale, Tangent, Brain } from "lucide-vue-next"
+import router from "@/router"
+import { useVectorHistoryStore } from "@/stores/vectorHistory"
+
+const route = useRoute()
+const historyStore = useVectorHistoryStore()
+
+const recordId = computed(() => {
+  const id = route.params.id
+  return Array.isArray(id) ? id[0] : id
+})
+
+const record = computed(() => (recordId.value ? historyStore.findRecord(recordId.value) : undefined))
+
+function shortText(value: string) {
+  const chars = Array.from(value)
+  return chars.length > 10 ? `${chars.slice(0, 10).join("")}...` : value
+}
+</script>
+
+<template>
+  <div class="space-y-0">
+    <n-card class="border-b-0!">
+      <template #header>
+        <div class="flex h-7 w-full items-center gap-3">
+          <n-button quaternary circle size="small" @click="router.push('/compare')">
+            <template #icon>
+              <n-icon><ArrowLeft /></n-icon>
+            </template>
+          </n-button>
+          <n-icon><Scale /></n-icon>
+          <span>对比结果</span>
+        </div>
+      </template>
+
+      <n-empty v-if="!record" description="没有找到这条对比记录">
+        <template #extra>
+          <n-button type="primary" @click="router.push('/compare')">重新对比</n-button>
+        </template>
+      </n-empty>
+
+      <div v-else class="space-y-3">
+        <h1 class="text-3xl font-semibold leading-tight">
+          近似度 {{ record.response.adjustedPercent }}
+        </h1>
+        <h2 class="text-xl leading-snug">
+          {{ shortText(record.response.texts.text1) }} vs {{ shortText(record.response.texts.text2) }}
+        </h2>
+        <div class="text-sm text-gray-500">
+          语义相似度 {{ record.response.percent }}
+        </div>
+      </div>
+    </n-card>
+
+    <n-card v-if="record" class="border-b-0!">
+      <template #header>
+        <div class="flex items-center gap-2">
+          <n-icon><Info /></n-icon>
+          <span>计算信息</span>
+        </div>
+      </template>
+
+      <div class="grid gap-4">
+        <div>
+          <div class="mb-2 flex items-center gap-2 text-sm opacity-75">
+            <n-icon><Clock3 /></n-icon>
+            <span>完成时间</span>
+          </div>
+          <div class="text-base">
+            {{ dayjs(record.completedAt).format("YYYY年MM月DD日 HH:mm") }}
+          </div>
+        </div>
+
+        <div>
+          <div class="mb-2 flex items-center gap-2 text-sm opacity-75">
+            <n-icon><Tangent /></n-icon>
+            <span>实际夹角余弦值</span>
+          </div>
+          <div class="text-base">
+            {{ record.response.cosineFullPrecision }}
+          </div>
+        </div>
+
+        <div>
+          <div class="mb-2 flex items-center gap-2 text-sm opacity-75">
+            <n-icon><Brain /></n-icon>
+            <span>AI 嵌入模型</span>
+          </div>
+          <div class="text-base">
+            {{ record.response.model }}
+          </div>
+        </div>
+
+      </div>
+    </n-card>
+  </div>
+</template>

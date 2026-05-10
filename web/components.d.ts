@@ -11,6 +11,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AlgorithmDetail: typeof import('./src/components/AlgorithmDetail.vue')['default']
     AppFooter: typeof import('./src/components/AppFooter.vue')['default']
     AppLayouts: typeof import('./src/components/AppLayouts.vue')['default']
     NButton: typeof import('naive-ui')['NButton']

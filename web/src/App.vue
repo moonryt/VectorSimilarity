@@ -10,6 +10,7 @@ import AppLayouts from "@/components/AppLayouts.vue";
 
 import katex from 'katex'
 import 'katex/dist/katex.css'
+import router from "@/router";
 
 const osThemeRef = useOsTheme()
 const theme = computed(() => (osThemeRef.value === 'dark' ? darkTheme : null))
@@ -39,10 +40,10 @@ useHead({
           <div class="flex flex-row justify-center items-start min-h-screen lg:px-8 xl:px-16">
             <div class="w-full lg:w-175 max-w-300 min-h-screen">
               <n-card
-                class="w-full justify-between px-4 sticky top-0 z-99 border-b-0!"
+                class="w-full justify-between px-3 sticky top-0 z-99 border-b-0!"
               >
                 <template #header>
-                  <div class="flex items-center gap-3 h-7 w-full">
+                  <div class="flex items-center gap-3 h-7 w-full cursor-pointer" @click="router.replace('/')">
                     <n-icon size="23"><Ruler /></n-icon>
                     <span>词相思</span>
                   </div>

@@ -3,9 +3,10 @@ import dayjs from "dayjs"
 import { computed } from "vue"
 import { useHead } from "@unhead/vue"
 import { useRoute } from "vue-router"
-import { ArrowLeft, Clock3, Info, Scale, Tangent, Brain } from "lucide-vue-next"
+import {ArrowLeft, Clock3, Info, Scale, Tangent, Brain, SquareFunction} from "lucide-vue-next"
 import router from "@/router"
 import { useVectorHistoryStore } from "@/stores/vectorHistory"
+import AlgorithmDetail from "@/components/AlgorithmDetail.vue";
 
 const route = useRoute()
 const historyStore = useVectorHistoryStore()
@@ -123,5 +124,18 @@ function handleBack() {
 
       </div>
     </n-card>
+
+    <n-card size="small" class="border-b-0!">
+      <template #header>
+        <div class="flex items-center gap-2">
+          <n-icon><SquareFunction /></n-icon>
+          <span>算法原理</span>
+        </div>
+      </template>
+
+    </n-card>
+
+    <AlgorithmDetail />
+
   </div>
 </template>

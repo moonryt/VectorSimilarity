@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import router from "@/router";
-import {BookOpenText, Scale, History} from "lucide-vue-next";
+import {BookOpenText, Scale, History, SquareFunction} from "lucide-vue-next";
 import { useHead } from "@unhead/vue";
 
 useHead({
@@ -46,6 +46,14 @@ useHead({
             <n-icon size="25"><History /></n-icon>
           </template>
           <n-thing title="历史记录" description="查询自己查询过的相似度计算">
+          </n-thing>
+        </n-list-item>
+
+        <n-list-item class="py-5!" @click="router.push('/about')">
+          <template #prefix>
+            <n-icon size="25"><SquareFunction /></n-icon>
+          </template>
+          <n-thing title="算法原理" description="关于页，有这个程序的算法原理及相关声明">
           </n-thing>
         </n-list-item>
       </n-list>

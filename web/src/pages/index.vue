@@ -2,6 +2,17 @@
 
 import router from "@/router";
 import {BookOpenText, Scale, History} from "lucide-vue-next";
+import { useHead } from "@unhead/vue";
+
+useHead({
+  title: "首页",
+  meta: [
+    {
+      name: "description",
+      content: "输入两个词汇或文本，计算它们的近似度和语义相似度。",
+    },
+  ],
+})
 </script>
 
 <template>

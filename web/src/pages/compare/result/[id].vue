@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import dayjs from "dayjs"
 import { computed } from "vue"
+import { useHead } from "@unhead/vue"
 import { useRoute } from "vue-router"
 import { ArrowLeft, Clock3, Info, Scale, Tangent, Brain } from "lucide-vue-next"
 import router from "@/router"
@@ -16,9 +17,34 @@ const recordId = computed(() => {
 
 const record = computed(() => (recordId.value ? historyStore.findRecord(recordId.value) : undefined))
 
+useHead({
+  title: computed(() => {
+    if (!record.value) {
+      return "对比结果"
+    }
+
+    return `${shortText(record.value.response.texts.text1)} vs ${shortText(record.value.response.texts.text2)}`
+  }),
+  meta: [
+    {
+      name: "description",
+      content: "查看本次文本近似度、语义相似度、余弦值结果。",
+    },
+  ],
+})
+
 function shortText(value: string) {
   const chars = Array.from(value)
   return chars.length > 10 ? `${chars.slice(0, 10).join("")}...` : value
+}
+
+function handleBack() {
+  if (window.history.state?.back) {
+    router.back()
+    return
+  }
+
+  void router.replace("/")
 }
 </script>
 
@@ -27,7 +53,7 @@ function shortText(value: string) {
     <n-card class="border-b-0!">
       <template #header>
         <div class="flex h-7 w-full items-center gap-3">
-          <n-button quaternary circle size="small" @click="router.push('/compare')">
+          <n-button quaternary circle size="small" @click="handleBack">
             <template #icon>
               <n-icon><ArrowLeft /></n-icon>
             </template>
@@ -50,7 +76,7 @@ function shortText(value: string) {
         <h2 class="text-xl leading-snug">
           {{ shortText(record.response.texts.text1) }} vs {{ shortText(record.response.texts.text2) }}
         </h2>
-        <div class="text-sm text-gray-500">
+        <div class="text-sm opacity-80">
           语义相似度 {{ record.response.percent }}
         </div>
       </div>

@@ -1,19 +1,21 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, reactive, ref, watch } from "vue"
+import { useHead } from "@unhead/vue"
 import { ArrowLeft, History, LoaderCircle, Scale } from "lucide-vue-next"
 import { compareSimilarity } from "@/apis/vector"
 import router from "@/router"
 import { useVectorHistoryStore } from "@/stores/vectorHistory"
 
 const MAX_TEXT_LENGTH = 128
-const FORMULA_INTERVAL_MS = 1300
+const FORMULA_INTERVAL_MS = 1250
 const FADE_MS = 200
+const RESULT_DELAY_MS = 500
 
 const formulas = [
-  String.raw`\mathbf{a}\cdot\mathbf{b}=\lVert\mathbf{a}\rVert\lVert\mathbf{b}\rVert\cos\theta`,
-  String.raw`\text{f(x)}=\frac{\text{cosine}+1.0}{2.0}`,
-  String.raw`\text{sigmoid(x)}=\frac{1.0}{1.0 + e^{-8.0(\text{f(x)}-0.65)}}`,
-  String.raw`(\text{sigmoid(x)}^{0.8}) \times 100.0`,
+  String.raw`\cos\theta=\frac{\mathbf{a}\cdot\mathbf{b}}{|\mathbf{a}|\cdot|\mathbf{b}|}`,
+  String.raw`n=\frac{\cos\theta+1}{2}`,
+  String.raw`\sigma(n)=\frac{1}{1+e^{-8(n-0.65)}}`,
+  String.raw`\operatorname{approx}(\mathbf{a},\mathbf{b})=100\cdot\sigma(n)^{0.8}`,
 ]
 
 const historyStore = useVectorHistoryStore()
@@ -24,9 +26,22 @@ const form = reactive<Item.SimilarityRequest>({
 })
 
 const submitting = ref(false)
+const submitAttempted = ref(false)
+const text1Touched = ref(false)
+const text2Touched = ref(false)
 const formulaIndex = ref(0)
 const formulaFading = ref(false)
 let formulaTimer: number | undefined
+
+useHead({
+  title: "近似计算",
+  meta: [
+    {
+      name: "description",
+      content: "输入两个词汇或文本，计算它们的近似度和语义相似度。",
+    },
+  ],
+})
 
 function getTextLength(value: string) {
   return Array.from(value.trim()).length
@@ -72,8 +87,19 @@ function startFormulaLoop() {
   }, FORMULA_INTERVAL_MS)
 }
 
+function delay(ms: number) {
+  return new Promise((resolve) => window.setTimeout(resolve, ms))
+}
+
 const text1Error = computed(() => getInputError(form.text1))
 const text2Error = computed(() => getInputError(form.text2))
+
+const visibleText1Error = computed(() =>
+  text1Touched.value || submitAttempted.value ? text1Error.value : "",
+)
+const visibleText2Error = computed(() =>
+  text2Touched.value || submitAttempted.value ? text2Error.value : "",
+)
 const canSubmit = computed(() => !text1Error.value && !text2Error.value && !submitting.value)
 
 watch(submitting, (value) => {
@@ -88,6 +114,8 @@ watch(submitting, (value) => {
 onBeforeUnmount(stopFormulaLoop)
 
 async function handleSubmit() {
+  submitAttempted.value = true
+
   if (!canSubmit.value) {
     window.$message.warning("请先检查两个输入文本")
     return
@@ -103,7 +131,9 @@ async function handleSubmit() {
   try {
     const response = await compareSimilarity(request)
     const id = historyStore.addRecord(request, response)
-    await router.push(`/compare/result/${id}`)
+    await delay(RESULT_DELAY_MS)
+    submitting.value = false
+    void router.push(`/compare/result/${id}`)
   } finally {
     submitting.value = false
   }
@@ -147,29 +177,31 @@ async function handleSubmit() {
   <n-card class="space-y-5 border-b-0!">
     <div class="grid gap-4 md:grid-cols-2">
       <n-form-item
-        label="文本 A"
-        :feedback="text1Error || `${getTextLength(form.text1)} / ${MAX_TEXT_LENGTH - 1}`"
-        :validation-status="text1Error ? 'error' : undefined"
+        label="第一个对比文本"
+        :feedback="visibleText1Error || `${getTextLength(form.text1)} / ${MAX_TEXT_LENGTH - 1}`"
+        :validation-status="visibleText1Error ? 'error' : undefined"
       >
         <n-input
           v-model:value="form.text1"
           clearable
           :disabled="submitting"
           placeholder="请输入第一个文本"
+          @blur="text1Touched = true"
           @keyup.enter="handleSubmit"
         />
       </n-form-item>
 
       <n-form-item
-        label="文本 B"
-        :feedback="text2Error || `${getTextLength(form.text2)} / ${MAX_TEXT_LENGTH - 1}`"
-        :validation-status="text2Error ? 'error' : undefined"
+        label="第二个对比文本"
+        :feedback="visibleText2Error || `${getTextLength(form.text2)} / ${MAX_TEXT_LENGTH - 1}`"
+        :validation-status="visibleText2Error ? 'error' : undefined"
       >
         <n-input
           v-model:value="form.text2"
           clearable
           :disabled="submitting"
           placeholder="请输入第二个文本"
+          @blur="text2Touched = true"
           @keyup.enter="handleSubmit"
         />
       </n-form-item>

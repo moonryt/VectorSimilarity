@@ -22,8 +22,7 @@ export const useVectorHistoryStore = defineStore(
     function addRecord(request: Item.SimilarityRequest, response: Item.SimilarityResponse) {
       const id = response.id || createHistoryId()
       const completedAt = response.completedAt || new Date().toISOString()
-
-      records.value.push({
+      const record: Item.CompareHistoryRecord = {
         id,
         completedAt,
         request,
@@ -32,11 +31,13 @@ export const useVectorHistoryStore = defineStore(
           id,
           completedAt,
         },
-      })
-
-      if (records.value.length > MAX_HISTORY_RECORDS) {
-        records.value.splice(0, records.value.length - MAX_HISTORY_RECORDS)
       }
+
+      const nextRecords = [...records.value, record]
+      records.value =
+        nextRecords.length > MAX_HISTORY_RECORDS
+          ? nextRecords.slice(nextRecords.length - MAX_HISTORY_RECORDS)
+          : nextRecords
 
       return id
     }

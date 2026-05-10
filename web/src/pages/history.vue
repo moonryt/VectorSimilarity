@@ -1,10 +1,62 @@
 <script setup lang="ts">
 import dayjs from "dayjs"
-import { ArrowLeft, History, Trash2 } from "lucide-vue-next"
+import { computed, ref, watch } from "vue"
+import { useHead } from "@unhead/vue"
+import { ArrowLeft, Clock3, History, Trash2 } from "lucide-vue-next"
 import router from "@/router"
 import { useVectorHistoryStore } from "@/stores/vectorHistory"
 
+const LOAD_STEP = 8
+
 const historyStore = useVectorHistoryStore()
+const visibleCount = ref(LOAD_STEP)
+
+const visibleRecords = computed(() => historyStore.latestRecords.slice(0, visibleCount.value))
+const hasMoreRecords = computed(() => visibleCount.value < historyStore.latestRecords.length)
+
+useHead({
+  title: "历史记录",
+  meta: [
+    {
+      name: "description",
+      content: "查看本地的文本近似度对比历史。",
+    },
+  ],
+})
+
+function shortText(value: string) {
+  const chars = Array.from(value)
+  return chars.length > 5 ? `${chars.slice(0, 6).join("")}...` : value
+}
+
+function handleLoadMore() {
+  if (!hasMoreRecords.value) {
+    return
+  }
+
+  visibleCount.value = Math.min(
+    visibleCount.value + LOAD_STEP,
+    historyStore.latestRecords.length,
+  )
+}
+
+function handleClearRecords() {
+  historyStore.clearRecords()
+  visibleCount.value = LOAD_STEP
+}
+
+function goResult(id: string) {
+  void router.push(`/compare/result/${id}`)
+}
+
+watch(
+  () => historyStore.records.length,
+  () => {
+    if (visibleCount.value > historyStore.latestRecords.length) {
+      visibleCount.value = Math.max(LOAD_STEP, historyStore.latestRecords.length)
+    }
+  },
+)
 </script>
 
 <template>
@@ -26,7 +78,7 @@ const historyStore = useVectorHistoryStore()
           circle
           size="small"
           :disabled="historyStore.records.length === 0"
-          @click="historyStore.clearRecords()"
+          @click="handleClearRecords"
         >
           <template #icon>
             <n-icon><Trash2 /></n-icon>
@@ -37,40 +89,42 @@ const historyStore = useVectorHistoryStore()
 
     <n-empty v-if="historyStore.records.length === 0" description="暂无对比记录" />
 
-    <n-list v-else hoverable>
-      <n-list-item v-for="record in historyStore.latestRecords" :key="record.id" class="py-4!">
-        <n-thing>
-          <template #header>
-            <div class="flex flex-wrap items-center gap-2">
+    <div v-else class="space-y-4">
+      <n-infinite-scroll
+        class="h-[420px] pr-1"
+        :distance="24"
+        @load="handleLoadMore"
+      >
+        <div class="space-y-3">
+          <n-card
+            v-for="record in visibleRecords"
+            :key="record.id"
+            size="small"
+            embedded
+            class="cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-white/5"
+            @click="goResult(record.id)"
+          >
+            <div class="flex items-center justify-between gap-3">
+              <n-ellipsis class="min-w-0 text-base">
+                {{ shortText(record.request.text1) }} vs {{ shortText(record.request.text2) }}
+              </n-ellipsis>
               <n-tag size="small" type="success">{{ record.response.adjustedPercent }}</n-tag>
-              <span class="text-sm text-gray-500">
+            </div>
+
+            <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs opacity-70">
+              <span class="flex items-center gap-1">
+                <n-icon><Clock3 /></n-icon>
                 {{ dayjs(record.completedAt).format("YYYY-MM-DD HH:mm:ss") }}
               </span>
+              <span>语义相似度 {{ record.response.percent }}</span>
             </div>
-          </template>
+          </n-card>
+        </div>
 
-          <template #description>
-            <div class="mt-2 grid gap-2 text-sm md:grid-cols-2">
-              <n-ellipsis>{{ record.request.text1 }}</n-ellipsis>
-              <n-ellipsis>{{ record.request.text2 }}</n-ellipsis>
-            </div>
-          </template>
-
-          <div class="mt-3 flex flex-wrap gap-2 text-xs text-gray-500">
-            <span>语义相似度：{{ record.response.percent }}</span>
-            <span>模型：{{ record.response.model }}</span>
-            <span>ID：{{ record.id }}</span>
-          </div>
-
-          <template #action>
-            <n-button quaternary circle size="small" @click="historyStore.removeRecord(record.id)">
-              <template #icon>
-                <n-icon><Trash2 /></n-icon>
-              </template>
-            </n-button>
-          </template>
-        </n-thing>
-      </n-list-item>
-    </n-list>
+        <div v-if="hasMoreRecords" class="py-3 text-center text-xs opacity-60">
+          继续向下滚动加载更多
+        </div>
+      </n-infinite-scroll>
+    </div>
   </n-card>
 </template>

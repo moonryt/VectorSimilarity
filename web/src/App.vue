@@ -4,6 +4,7 @@ import { RouterView } from 'vue-router'
 import {Ruler} from 'lucide-vue-next';
 import {darkTheme, useOsTheme, zhCN} from "naive-ui";
 import { computed } from 'vue'
+import { useHead } from '@unhead/vue'
 import AppFooter from "@/components/AppFooter.vue";
 import AppLayouts from "@/components/AppLayouts.vue";
 
@@ -12,6 +13,16 @@ import 'katex/dist/katex.css'
 
 const osThemeRef = useOsTheme()
 const theme = computed(() => (osThemeRef.value === 'dark' ? darkTheme : null))
+
+useHead({
+  titleTemplate: (title) => title ? `${title} - 文字相似度计算小助手` : '文字相似度计算小助手',
+  meta: [
+    {
+      name: 'subtitle',
+      content: '文字相似度计算小助手',
+    },
+  ],
+})
 </script>
 
 <template>

@@ -15,11 +15,11 @@ const osThemeRef = useOsTheme()
 const theme = computed(() => (osThemeRef.value === 'dark' ? darkTheme : null))
 
 useHead({
-  titleTemplate: (title) => title ? `${title} - 文字相似度计算小助手` : '文字相似度计算小助手',
+  titleTemplate: (title) => title ? `${title} - 词相思 · 文字相似度计算小助手` : '词相思 文字相似度计算小助手',
   meta: [
     {
       name: 'subtitle',
-      content: '文字相似度计算小助手',
+      content: '词相思 · 文字相似度计算小助手',
     },
   ],
 })
@@ -44,7 +44,7 @@ useHead({
                 <template #header>
                   <div class="flex items-center gap-3 h-7 w-full">
                     <n-icon size="23"><Ruler /></n-icon>
-                    <span>文字相似度计算小助手</span>
+                    <span>词相思</span>
                   </div>
                 </template>
               </n-card>

@@ -103,7 +103,7 @@ const cosineFormula = String.raw`\cos\theta`
         </div>
 
         <p class="text-sm opacity-80 pt-3 pb-1 px-0.5">
-          近似度和语义相似度反应了这两个文段意思上的相似度，而非只看字是否相同。它们的相似度也人工直接赋予，而是基于 AI 与算法。
+          近似度和语义相似度反应了这两个文段意思上的相似度，而非只看字是否相同。它们的相似度也非人工直接赋予，而是基于 AI 与算法。
         </p>
       </div>
     </n-card>

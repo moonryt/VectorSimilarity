@@ -141,7 +141,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <n-card class="border-b-0!">
+  <n-card size="small" class="border-b-0!">
     <template #header>
       <div class="flex h-7 w-full items-center gap-3">
         <n-button quaternary circle size="small" @click="router.push('/')">

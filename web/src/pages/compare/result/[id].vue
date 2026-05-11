@@ -166,7 +166,7 @@ const cosineFormula = String.raw`\cos\theta`
     <AlgorithmDetail />
 
     <n-card size="small" class="border-b-0! flex items-center justify-center">
-      <p>包含算法的更多信息请查看 <RouterLink to="/about" class="text-green">关于算法</RouterLink>。</p>
+      <p>包含算法的更多信息请查看 <RouterLink to="/about" class="text-green hover:underline">关于算法</RouterLink>。</p>
     </n-card>
 
   </div>

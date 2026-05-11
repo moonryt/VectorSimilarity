@@ -60,7 +60,7 @@ watch(
 </script>
 
 <template>
-  <n-card class="border-b-0!">
+  <n-card size="small" class="border-b-0!">
     <template #header>
       <div class="flex h-7 w-full items-center justify-between gap-3">
         <div class="flex items-center gap-3">
@@ -87,11 +87,14 @@ watch(
       </div>
     </template>
 
+  </n-card>
+
+  <n-card class="border-b-0!">
     <n-empty v-if="historyStore.records.length === 0" description="暂无对比记录" />
 
     <div v-else class="space-y-4">
       <n-infinite-scroll
-        class="h-[420px] pr-1"
+        class="h-105 pr-1"
         :distance="24"
         @load="handleLoadMore"
       >
@@ -101,12 +104,12 @@ watch(
             :key="record.id"
             size="small"
             embedded
-            class="cursor-pointer transition-colors hover:bg-gray-50 dark:hover:bg-white/5"
+            class="cursor-pointer transition-colors"
             @click="goResult(record.id)"
           >
             <div class="flex items-center justify-between gap-3">
               <n-ellipsis class="min-w-0 text-base">
-                {{ shortText(record.request.text1) }} vs {{ shortText(record.request.text2) }}
+                {{ shortText(record.request.text1) }} 与 {{ shortText(record.request.text2) }}
               </n-ellipsis>
               <n-tag size="small" type="success">{{ record.response.adjustedPercent }}</n-tag>
             </div>
@@ -114,7 +117,7 @@ watch(
             <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs opacity-70">
               <span class="flex items-center gap-1">
                 <n-icon><Clock3 /></n-icon>
-                {{ dayjs(record.completedAt).format("YYYY-MM-DD HH:mm:ss") }}
+                {{ dayjs(record.completedAt).format("YYYY年MM月DD日 HH:mm") }}
               </span>
               <span>语义相似度 {{ record.response.percent }}</span>
             </div>

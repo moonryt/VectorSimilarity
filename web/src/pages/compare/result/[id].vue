@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import dayjs from "dayjs"
-import {computed, onMounted, ref} from "vue"
+import {computed} from "vue"
 import { useHead } from "@unhead/vue"
 import { useRoute } from "vue-router"
 import {ArrowLeft, Clock3, Info, Scale, Tangent, Brain, SquareFunction} from "lucide-vue-next"
@@ -80,7 +80,7 @@ const cosineFormula = String.raw`\cos\theta`
           「{{ shortText(record.response.texts.text1) }}」与「{{ shortText(record.response.texts.text2) }}」
         </h2>
 
-        <h1 class="text-4xl font-bold leading-tight pt-1">
+        <h1 class="text-4xl font-bold leading-tight pt-1 px-0.5">
           近似度为
           <n-number-animation
             :from="0.00"
@@ -91,7 +91,7 @@ const cosineFormula = String.raw`\cos\theta`
           %
         </h1>
 
-        <div class="items-center opacity-85 pt-1.5">
+        <div class="items-center opacity-85 pt-1.5 px-0.5">
           语义相似度
           <n-number-animation
             :from="0.00"
@@ -102,7 +102,7 @@ const cosineFormula = String.raw`\cos\theta`
           %
         </div>
 
-        <p class="text-sm opacity-80 pt-3 pb-1">
+        <p class="text-sm opacity-80 pt-3 pb-1 px-0.5">
           近似度和语义相似度反应了这两个文段意思上的相似度，而非只看字是否相同。它们的相似度也人工直接赋予，而是基于 AI 与算法。
         </p>
       </div>

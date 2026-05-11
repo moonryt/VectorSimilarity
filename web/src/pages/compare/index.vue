@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, reactive, ref, watch } from "vue"
 import { useHead } from "@unhead/vue"
-import { ArrowLeft, History, LoaderCircle, Scale } from "lucide-vue-next"
+import { ArrowLeft, Eraser, History, LoaderCircle, Scale } from "lucide-vue-next"
 import { compareSimilarity } from "@/apis/vector"
 import router from "@/router"
 import { useVectorHistoryStore } from "@/stores/vectorHistory"
@@ -89,6 +89,16 @@ function startFormulaLoop() {
 
 function delay(ms: number) {
   return new Promise((resolve) => window.setTimeout(resolve, ms))
+}
+
+function handleClear() {
+  form.text1 = ""
+  form.text2 = ""
+  submitAttempted.value = false
+  text1Touched.value = false
+  text2Touched.value = false
+  formulaIndex.value = 0
+  formulaFading.value = false
 }
 
 const text1Error = computed(() => getInputError(form.text1))
@@ -207,7 +217,14 @@ async function handleSubmit() {
       </n-form-item>
     </div>
 
-    <div class="flex justify-end">
+    <div class="flex justify-end gap-2">
+      <n-button secondary :disabled="submitting" @click="handleClear">
+        <template #icon>
+          <n-icon><Eraser /></n-icon>
+        </template>
+        清空
+      </n-button>
+
       <n-button type="primary" :loading="submitting" :disabled="!canSubmit" @click="handleSubmit">
         <template #icon>
           <n-icon>

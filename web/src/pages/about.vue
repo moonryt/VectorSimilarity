@@ -47,7 +47,7 @@ useHead({
       </p>
 
       <p>
-        我们设计架构、算法及逻辑后使用 OpenAI Codex 辅助开发逻辑部分，手写 UI。前端为 Vue3 Pinia Tailwind，后端 Python FastAPI Ollama 等。
+        我们设计架构、算法及逻辑后使用 Codex 辅助开发逻辑代码，手写 UI。前端为 Vue Tailwindcss naive-ui，后端 FastAPI (Python) Ollama 等。
       </p>
 
     </div>

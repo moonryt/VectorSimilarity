@@ -24,12 +24,12 @@ useHead({
       return "对比结果"
     }
 
-    return `${shortText(record.value.response.texts.text1)} vs ${shortText(record.value.response.texts.text2)}`
+    return `${shortText(record.value.response.texts.text1)} 与 ${shortText(record.value.response.texts.text2)}`
   }),
   meta: [
     {
       name: "description",
-      content: "查看本次文本近似度、语义相似度、余弦值结果。",
+      content: "查看所对比的文本的近似度、语义相似度和余弦值结果。",
     },
   ],
 })

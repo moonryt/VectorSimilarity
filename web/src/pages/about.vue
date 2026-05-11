@@ -47,7 +47,7 @@ useHead({
       </p>
 
       <p>
-        我们设计架构、算法及逻辑后使用 OpenAI Codex 辅助开发逻辑部分，手写 UI。前端为 Vue3 Pinia NaiveUI Tailwind，后端 Python Ollama 等。
+        我们设计架构、算法及逻辑后使用 OpenAI Codex 辅助开发逻辑部分，手写 UI。前端为 Vue3 Pinia Tailwind，后端 Python FastAPI Ollama 等。
       </p>
 
     </div>
@@ -68,7 +68,6 @@ useHead({
 
       <p>本站的服务器不会存储您的任何信息，所有内容均保存在您浏览器本地，我们不为本站上的任何内容负责。</p>
 
-      <p>本项目以 MIT License 在 Github 上开源，欢迎各位同志贡献更好的代码与算法。</p>
     </div>
 
   </n-card>

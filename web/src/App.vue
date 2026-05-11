@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import { RouterView } from 'vue-router'
-import {Ruler} from 'lucide-vue-next';
 import {darkTheme, useOsTheme, zhCN} from "naive-ui";
 import { computed } from 'vue'
 import { useHead } from '@unhead/vue'
@@ -37,15 +36,15 @@ useHead({
 
           <AppLayouts />
 
-          <div class="flex flex-row justify-center items-start min-h-screen lg:px-8 xl:px-16">
+          <div class="flex flex-row justify-center items-start min-h-screen lg:px-8 xl:px-12">
             <div class="w-full lg:w-175 max-w-300 min-h-screen">
               <n-card
-                class="w-full justify-between px-3 sticky top-0 z-99 border-b-0!"
+                class="w-full justify-between sticky top-0 z-99 border-b-0!"
               >
                 <template #header>
-                  <div class="flex items-center gap-3 h-7 w-full cursor-pointer" @click="router.replace('/')">
-                    <n-icon size="23"><Ruler /></n-icon>
-                    <span>词相思</span>
+                  <div class="flex items-center gap-1.5 h-7 w-full cursor-pointer" @click="router.replace('/')">
+                    <img src="@/assets/img/logo.png" alt="Logo" class="w-10! h-10!" />
+                    <span class="text-xl font-semibold">词相思</span>
                   </div>
                 </template>
               </n-card>

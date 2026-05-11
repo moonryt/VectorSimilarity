@@ -51,7 +51,7 @@ function handleBack() {
 
 <template>
   <div class="space-y-0">
-    <n-card class="border-b-0!">
+    <n-card size="small" class="border-b-0!">
       <template #header>
         <div class="flex h-7 w-full items-center gap-3">
           <n-button quaternary circle size="small" @click="handleBack">
@@ -64,22 +64,31 @@ function handleBack() {
         </div>
       </template>
 
+    </n-card>
+
+    <n-card class="border-b-0!">
       <n-empty v-if="!record" description="没有找到这条对比记录">
         <template #extra>
           <n-button type="primary" @click="router.push('/compare')">重新对比</n-button>
         </template>
       </n-empty>
 
-      <div v-else class="space-y-3">
-        <h1 class="text-3xl font-semibold leading-tight">
-          近似度 {{ record.response.adjustedPercent }}
-        </h1>
-        <h2 class="text-xl leading-snug">
+      <div v-else class="space-y-0">
+        <h2 class="text-2xl leading-snug">
           {{ shortText(record.response.texts.text1) }} vs {{ shortText(record.response.texts.text2) }}
         </h2>
-        <div class="text-sm opacity-80">
+
+        <h1 class="text-4xl font-bold leading-tight pt-1">
+          近似度 {{ record.response.adjustedPercent }}
+        </h1>
+
+        <div class=" opacity-85 pt-2">
           语义相似度 {{ record.response.percent }}
         </div>
+
+        <p class="text-sm opacity-80 pt-5 pb-1">
+          近似度和语义相似度反应了这两个文段意思上的相似度，而非只看字是否相同。它们的相似度也人工直接赋予，而是基于 AI 与算法。
+        </p>
       </div>
     </n-card>
 
@@ -133,9 +142,14 @@ function handleBack() {
         </div>
       </template>
 
+
     </n-card>
 
     <AlgorithmDetail />
+
+    <n-card size="small" class="border-b-0! flex items-center justify-center">
+      <p>包含算法的更多信息请查看 <RouterLink to="/about" class="text-green">关于算法</RouterLink>。</p>
+    </n-card>
 
   </div>
 </template>

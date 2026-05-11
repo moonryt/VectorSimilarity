@@ -41,4 +41,18 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  build: {
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          groups: [
+            {
+              test: 'katex',
+              name: 'katex',
+            },
+          ],
+        }
+      }
+    }
+  }
 })

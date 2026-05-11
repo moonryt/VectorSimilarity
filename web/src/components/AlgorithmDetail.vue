@@ -2,9 +2,10 @@
 
 const embeddingFormula = String.raw`\text{文本}_1 \rightarrow \mathbf{a},\quad \text{文本}_2 \rightarrow \mathbf{b}`
 const dotProductFormula = String.raw`\mathbf{a}\cdot\mathbf{b}=|\mathbf{a}||\mathbf{b}|\cos\theta`
-const cosineFormula = String.raw`\cos\theta=\frac{\mathbf{a}\cdot\mathbf{b}}{|\mathbf{a}|\cdot|\mathbf{b}|}`
+const cosineFormula = String.raw`\cos\theta=\cos\langle\mathbf{a},\mathbf{b}\rangle=\frac{\mathbf{a}\cdot\mathbf{b}}{|\mathbf{a}|\cdot|\mathbf{b}|}`
 const normalizedFormula = String.raw`n=\frac{\cos\theta+1}{2}`
 const sigmoidFormula = String.raw`\sigma(n)=\frac{1}{1+e^{-8(n-0.65)}}`
+
 </script>
 
 <template>
@@ -23,6 +24,8 @@ const sigmoidFormula = String.raw`\sigma(n)=\frac{1}{1+e^{-8(n-0.65)}}`
       </div>
 
       <p>
+        设两向量夹角为
+        <n-equation class="inline-block align-middle" value="\theta" :inline="true" />。
         计算相似度的原理，是利用高中学过的点乘定义式：
       </p>
 
@@ -31,7 +34,7 @@ const sigmoidFormula = String.raw`\sigma(n)=\frac{1}{1+e^{-8(n-0.65)}}`
       </div>
 
       <p>
-        同时也知道
+        易知
         <n-equation class="inline-block align-middle" value="\cos\theta" :inline="true" />
         为两向量的夹角余弦值。因为
         <n-equation class="inline-block align-middle" value="\cos x" :inline="true" />

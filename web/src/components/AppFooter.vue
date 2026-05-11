@@ -8,7 +8,7 @@
     class="flex! flex-col! px-2! gap-2"
   >
 
-    <div class="flex flex-col items-center justify-center">
+    <div class="flex flex-col items-center justify-center text-center">
       <p class="flex flex-row items-center gap-0.5 pr-1.5">
         <img src="@/assets/img/logo.png" alt="icon" class="w-5! h-5!" >
         By

@@ -158,8 +158,8 @@ async function handleSubmit() {
 
   <n-card size="small" embedded class="flex justify-center border-b-0!">
 
-    <div v-if="!submitting" class="flex px-2 text-base">
-      请输入想要查看近似度的词汇或文本。
+    <div v-if="!submitting" class="flex px-2 text-sm">
+      请输入两个想要查看其近似度的词汇或文本。
     </div>
 
     <div v-else class="flex items-center gap-3">
@@ -177,7 +177,7 @@ async function handleSubmit() {
   <n-card class="space-y-5 border-b-0!">
     <div class="grid gap-4 md:grid-cols-2">
       <n-form-item
-        label="第一个对比文本"
+        label="第一个文本"
         :feedback="visibleText1Error || `${getTextLength(form.text1)} / ${MAX_TEXT_LENGTH - 1}`"
         :validation-status="visibleText1Error ? 'error' : undefined"
       >
@@ -192,7 +192,7 @@ async function handleSubmit() {
       </n-form-item>
 
       <n-form-item
-        label="第二个对比文本"
+        label="第二个文本"
         :feedback="visibleText2Error || `${getTextLength(form.text2)} / ${MAX_TEXT_LENGTH - 1}`"
         :validation-status="visibleText2Error ? 'error' : undefined"
       >

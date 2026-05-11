@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import dayjs from "dayjs"
-import { computed } from "vue"
+import {computed, onMounted, ref} from "vue"
 import { useHead } from "@unhead/vue"
 import { useRoute } from "vue-router"
 import {ArrowLeft, Clock3, Info, Scale, Tangent, Brain, SquareFunction} from "lucide-vue-next"
@@ -47,6 +47,8 @@ function handleBack() {
 
   void router.replace("/")
 }
+
+const cosineFormula = String.raw`\cos\theta`
 </script>
 
 <template>
@@ -75,18 +77,32 @@ function handleBack() {
 
       <div v-else class="space-y-0">
         <h2 class="text-2xl leading-snug">
-          {{ shortText(record.response.texts.text1) }} vs {{ shortText(record.response.texts.text2) }}
+          「{{ shortText(record.response.texts.text1) }}」与「{{ shortText(record.response.texts.text2) }}」
         </h2>
 
         <h1 class="text-4xl font-bold leading-tight pt-1">
-          近似度 {{ record.response.adjustedPercent }}
+          近似度为
+          <n-number-animation
+            :from="0.00"
+            :to="record.response.adjustedValue"
+            :precision="2"
+            :duration="1300"
+          />
+          %
         </h1>
 
-        <div class=" opacity-85 pt-2">
-          语义相似度 {{ record.response.percent }}
+        <div class="items-center opacity-85 pt-1.5">
+          语义相似度
+          <n-number-animation
+            :from="0.00"
+            :to="record.response.percentValue"
+            :precision="2"
+            :duration="1400"
+          />
+          %
         </div>
 
-        <p class="text-sm opacity-80 pt-5 pb-1">
+        <p class="text-sm opacity-80 pt-3 pb-1">
           近似度和语义相似度反应了这两个文段意思上的相似度，而非只看字是否相同。它们的相似度也人工直接赋予，而是基于 AI 与算法。
         </p>
       </div>
@@ -117,7 +133,9 @@ function handleBack() {
             <span>实际夹角余弦值</span>
           </div>
           <div class="text-base">
-            {{ record.response.cosineFullPrecision }}
+            <n-equation :value="cosineFormula" />
+            =
+            {{ record.response.cosineFullPrecision.substring(0, 13) }}
           </div>
         </div>
 

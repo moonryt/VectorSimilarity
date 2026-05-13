@@ -90,7 +90,7 @@ watch(
   </n-card>
 
   <n-card class="border-b-0!">
-    <n-empty v-if="historyStore.records.length === 0" description="暂无对比记录" />
+    <n-empty v-if="historyStore.records.length === 0" description="暂无历史记录" />
 
     <div v-else class="space-y-4">
       <n-infinite-scroll
@@ -125,7 +125,7 @@ watch(
         </div>
 
         <div v-if="hasMoreRecords" class="py-3 text-center text-xs opacity-60">
-          继续向下滚动加载更多
+          继续浏览以加载更多
         </div>
       </n-infinite-scroll>
     </div>

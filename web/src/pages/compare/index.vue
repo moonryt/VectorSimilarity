@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, reactive, ref, watch } from "vue"
 import { useHead } from "@unhead/vue"
+import DOMPurify from "dompurify"
 import { ArrowLeft, Eraser, History, LoaderCircle, Scale } from "lucide-vue-next"
 import { compareSimilarity } from "@/apis/vector"
 import router from "@/router"
@@ -44,7 +45,14 @@ useHead({
 })
 
 function getTextLength(value: string) {
-  return Array.from(value.trim()).length
+  return Array.from(sanitizeText(value)).length
+}
+
+function sanitizeText(value: string) {
+  return DOMPurify.sanitize(value, {
+    ALLOWED_ATTR: [],
+    ALLOWED_TAGS: [],
+  }).trim()
 }
 
 function getInputError(value: string) {
@@ -134,9 +142,12 @@ async function handleSubmit() {
   submitting.value = true
 
   const request = {
-    text1: form.text1.trim(),
-    text2: form.text2.trim(),
+    text1: sanitizeText(form.text1),
+    text2: sanitizeText(form.text2),
   }
+
+  form.text1 = request.text1
+  form.text2 = request.text2
 
   try {
     const response = await compareSimilarity(request)

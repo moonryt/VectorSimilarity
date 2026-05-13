@@ -12,7 +12,7 @@ const sigmoidFormula = String.raw`\sigma(n)=\frac{1}{1+e^{-8(n-0.65)}}`
   <n-card class="border-b-0!">
     <div class="space-y-5 leading-7 px-2">
       <p>
-        要计算两段话的相似度，首先将两段话进行文本嵌入，得到分别代表两段话的向量
+        要计算两段话的相似度，首先将两段话进行文本嵌入，得到分别代表两段话的词向量
         <n-equation class="inline-block align-middle" value="\mathbf{a}" :inline="true" />
         和
         <n-equation class="inline-block align-middle" value="\mathbf{b}" :inline="true" />
@@ -52,7 +52,7 @@ const sigmoidFormula = String.raw`\sigma(n)=\frac{1}{1+e^{-8(n-0.65)}}`
       <p>
         但是实践测试中，余弦值均值大约集中在
         <n-equation class="inline-block align-middle" value="0.4\sim0.6" :inline="true" />
-        ，直接展示会让结果比较机器化，心理上的激励也更小，所以需要对中间区间进行调整以非线性变换。
+        ，直接展示会让结果比较机器化，心理上的激励也更小，所以需要对中间区间进行非线性变换调整。
       </p>
 
       <p>
@@ -76,7 +76,7 @@ const sigmoidFormula = String.raw`\sigma(n)=\frac{1}{1+e^{-8(n-0.65)}}`
       </div>
 
       <p>
-        准确来说，这个函数会让中间区间的变化更敏感，而两端逐渐趋于饱和，使结果更加符合心理预期，这就是两词语间的「近似度」。
+        准确来讲，该函数会让中间区间的变化更加敏感，而两端逐渐趋于饱和，使结果更加符合心理预期，这就是两词语间的「近似度」。
       </p>
       <p>
         综上，这几个函数是对本站算法的集中体现，所以其实对比页那个加载公式动画，计算虽为假，但算法却为真。
